@@ -1,0 +1,35 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  background-color: #AAA;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0; }
+
+#big-box {
+  height: 100%; }
+  #big-box > div {
+    border: 1px solid #666;
+    margin: 0.5em; }
+
+#top-box {
+  min-height: 1em;
+  flex: 1; }
+
+#middle-box tbody tr {
+  position: relative;
+  height: 4.5em;
+  border-bottom: 4px double black; }
+
+#middle-box .player-inning {
+  background-image: url(../img/inning.svg);
+  background-size: cover;
+  border: solid black;
+  border-width: 1px 1px 1px 1px;
+  width: 4.5em; }
+
+#bottom-box {
+  min-height: 6em;
+  flex: 4; }
