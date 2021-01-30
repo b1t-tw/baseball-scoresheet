@@ -14,7 +14,7 @@ $(window).resize(function () {
     }
 });
 
-$(".magnet-list").on("input", ".magnet-info input", function() {
+$(".magnet-list").on("input", ".magnet-info input", function () {
     let mid = $(this).parent(".magnet-info").data("mid");
     $(`.magnet[data-mid="${mid}"] a`).text($(this).val());
 });
@@ -46,15 +46,14 @@ whiteboard.on("mouseup", dragEnd);
 whiteboard.on("touchmove", dragMove);
 whiteboard.on("mousemove", dragMove);
 
-function appendMagnetDom(mid) {
-    let magnet_dom = `<div class="magnet red" draggable="false" data-mid="${mid}"><a></a></div>`;
+function appendMagnetDom(mid, color = "red") {
+    let magnet_dom = `<div class="magnet ${color}" draggable="false" data-mid="${mid}"><a></a></div>`;
     let list_dom = `
-    <p class="magnet-info" data-mid="${mid}">${mid}
-
+    <p class="magnet-info ${color}" data-mid="${mid}">
     <button name="red" style="background-color: red;"></button>
     <button name="yellow" style="background-color: yellow;"></button>
     <button name="blue" style="background-color: blue;"></button>
-    <input type="text" name="name" class="ml-4">
+    <input type="text" name="name">
 
     </p>`;
     $(".inner-board").append(magnet_dom);
@@ -87,7 +86,7 @@ function addMagnetDefaut(e) {
     }
 }
 
-function clearMagnet(e) {    
+function clearMagnet(e) {
     if (e.type == "touchstart") {
         e.preventDefault();
     }
@@ -101,30 +100,29 @@ function changeMagnetColor(e) {
     }
 
     let mid = $(this).parent(".magnet-info").data("mid");
-    $(`.magnet[data-mid="${mid}"]`).removeClass("red");
-    $(`.magnet[data-mid="${mid}"]`).removeClass("yellow");
-    $(`.magnet[data-mid="${mid}"]`).removeClass("blue");
+    $(`[data-mid="${mid}"]`).removeClass("red");
+    $(`[data-mid="${mid}"]`).removeClass("yellow");
+    $(`[data-mid="${mid}"]`).removeClass("blue");
 
     switch ($(this).attr("name")) {
         case "red":
-            $(`.magnet[data-mid="${mid}"]`).addClass("red");
+            $(`[data-mid="${mid}"]`).addClass("red");
             break;
         case "yellow":
-            $(`.magnet[data-mid="${mid}"]`).addClass("yellow");
+            $(`[data-mid="${mid}"]`).addClass("yellow");
             break;
         case "blue":
-            $(`.magnet[data-mid="${mid}"]`).addClass("blue");
+            $(`[data-mid="${mid}"]`).addClass("blue");
             break;
-    
+
         default:
             break;
-    }    
+    }
 }
 
 function handlerInOut(e) {
     mid = $(this).data("mid");
-    $(`.magnet[data-mid="${mid}"]`).toggleClass("highlight");
-    $(`.magnet-list p[data-mid="${mid}"]`).toggleClass("highlight");
+    $(`[data-mid="${mid}"]`).toggleClass("highlight");
 }
 
 function magnetChoose(e) {
@@ -138,8 +136,14 @@ function magnetChoose(e) {
     $(".highlight").removeClass("highlight");
 
     mid = $(this).data("mid");
-    $(`.magnet[data-mid="${mid}"]`).toggleClass("highlight");
-    $(`.magnet-list p[data-mid="${mid}"]`).toggleClass("highlight");
+    $(`[data-mid="${mid}"]`).toggleClass("highlight");
+    console.log($(`.magnet-info[data-mid="${mid}"]`).position().top);
+    $(".magnet-list-box").animate(
+        {
+            scrollTop: $(`.magnet-info[data-mid="${mid}"]`).position().top
+        },
+        500
+    );
 }
 
 function dragStart(e) {

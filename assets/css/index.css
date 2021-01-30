@@ -17,8 +17,20 @@ body {
     width: 100%;
     padding-top: 100%;
     height: 0; }
+  .outer-board #footer {
+    position: fixed;
+    left: 1em;
+    bottom: 1em; }
+  .outer-board .flex-column #footer {
+    background-color: #666;
+    position: relative;
+    text-align: right;
+    left: 0;
+    bottom: 0;
+    padding: 0.5em; }
   .outer-board .board-option {
-    flex: 1 1;
+    display: block;
+    flex: 1;
     background-color: #666; }
 
 .magnet {
@@ -53,22 +65,42 @@ body {
     word-break: keep-all;
     word-wrap: none;
     background-color: rgba(0, 0, 0, 0.5);
-    font-weight: bold; }
+    font-weight: bold;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                      supported by Chrome and Opera */ }
+  .magnet-list-box {
+    padding: 0.5em;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #777; }
   .magnet-list {
-    background-color: #777;
-    min-height: 100%; }
+    position: relative; }
     .magnet-list p {
       padding: 1em;
       width: 100%;
       word-break: break-all;
       background-color: #AAA; }
       .magnet-list p.highlight {
-        background-color: #A88; }
-    .magnet-list-box {
-      overflow-y: auto;
-      overflow-x: hidden;
-      flex: 1; }
+        background-color: #CCC; }
+      .magnet-list p.blue button[name="blue"] {
+        outline: 3px solid white; }
+      .magnet-list p.red button[name="red"] {
+        outline: 3px solid white; }
+      .magnet-list p.yellow button[name="yellow"] {
+        outline: 3px solid white; }
     .magnet-list .magnet-info button {
       height: 1em;
       width: 1em;
-      margin-left: 0.5em; }
+      margin: 0 0.25em; }
