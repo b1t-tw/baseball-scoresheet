@@ -1,35 +1,70 @@
 body {
-  height: 100vh;
-  width: 100vw;
-  background-color: #AAA;
-  margin: 0;
-  padding: 0;
+  height: 100%;
+  width: 100%;
+  touch-action: none; }
+
+.outer-board {
+  background-color: #DDD; }
+  .outer-board .inner-board {
+    width: 100vh;
+    height: 100vh;
+    position: relative;
+    background-image: url("../img/baseball_field_1x1.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat; }
+  .outer-board .flex-column .inner-board {
+    width: 100%;
+    padding-top: 100%;
+    height: 0; }
+  .outer-board .board-option {
+    flex: auto;
+    background-color: #666; }
+
+.magnet {
+  z-index: 9999999999;
   position: absolute;
-  top: 0;
-  left: 0; }
-
-#big-box {
-  height: 100%; }
-  #big-box > div {
-    border: 1px solid #666;
-    margin: 0.5em; }
-
-#top-box {
-  min-height: 1em;
-  flex: 1; }
-
-#middle-box tbody tr {
-  position: relative;
-  height: 4.5em;
-  border-bottom: 4px double black; }
-
-#middle-box .player-inning {
-  background-image: url(../img/inning.svg);
-  background-size: cover;
-  border: solid black;
-  border-width: 1px 1px 1px 1px;
-  width: 4.5em; }
-
-#bottom-box {
-  min-height: 6em;
-  flex: 4; }
+  left: 5%;
+  bottom: 5%;
+  height: 0;
+  width: 0;
+  margin-left: -2%;
+  margin-top: -2%;
+  display: block;
+  padding-left: 3%;
+  padding-top: 3%;
+  border-radius: 50%;
+  background-color: #FFF; }
+  .magnet.blue {
+    border: 3px solid blue; }
+    .magnet.blue.highlight {
+      background-color: #AAF; }
+  .magnet.red {
+    border: 3px solid red; }
+    .magnet.red.highlight {
+      background-color: #FAA; }
+  .magnet.green {
+    border: 3px solid green; }
+    .magnet.green.highlight {
+      background-color: #AFA; }
+  .magnet p {
+    padding: 1em;
+    width: 100%;
+    word-break: break-all;
+    background-color: #AAA; }
+    .magnet p.highlight {
+      background-color: #A88; }
+  .magnet-list {
+    background-color: #777;
+    min-height: 100%; }
+    .magnet-list p {
+      padding: 1em;
+      width: 100%;
+      word-break: break-all;
+      background-color: #AAA; }
+      .magnet-list p.highlight {
+        background-color: #A88; }
+    .magnet-list-box {
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex: 1; }

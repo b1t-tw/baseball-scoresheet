@@ -1,44 +1,103 @@
 body {
-    height: 100vh;
-    width: 100vw;
-    background-color: #AAA;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
+    height      : 100%;
+    width       : 100%;
+    touch-action: none;
 }
 
-#big-box {    
-    height: 100%;
-    > div {
-        border: 1px solid #666;
-        margin: 0.5em;
+.outer-board {
+    background-color: #DDD;
+
+    .inner-board {
+        width              : 100vh;
+        height             : 100vh;
+        position           : relative;
+        background-image   : url("../img/baseball_field_1x1.svg");
+        background-position: center;
+        background-size    : contain;
+        background-repeat  : no-repeat;
+    }
+
+    .flex-column .inner-board {
+        width      : 100%;
+        padding-top: 100%;
+        height     : 0;
+    }
+
+    .board-option {
+        flex            : auto;
+        background-color: #666;
     }
 }
 
-#top-box {
-    min-height: 1em;
-    flex: 1;
-}
+.magnet {
+    z-index         : 9999999999;
+    position        : absolute;
+    left            : 5%;
+    bottom          : 5%;
+    height          : 0;
+    width           : 0;
+    margin-left     : -2%;
+    margin-top      : -2%;
+    display         : block;
+    padding-left    : 3%;
+    padding-top     : 3%;
+    border-radius   : 50%;
+    background-color: #FFF;
 
-#middle-box {
-    tbody tr {
-        position: relative;
-        height: 4.5em;
-        border-bottom: 4px double black;
+    &.blue {
+        border: 3px solid blue;
+
+        &.highlight {
+            background-color: #AAF;
+        }
     }
-    .player-inning {
-        background-image: url(../img/inning.svg);
-        background-size: cover;
-        border: solid black;
-        border-width: 1px 1px 1px 1px;
-        width: 4.5em;
+
+    &.red {
+        border: 3px solid red;
+
+        &.highlight {
+            background-color: #FAA;
+        }
+    }
+
+    &.green {
+        border: 3px solid green;
+
+        &.highlight {
+            background-color: #AFA;
+        }
+    }
+
+    p {
+        padding         : 1em;
+        width           : 100%;
+        word-break      : break-all;
+        background-color: #AAA;
+
+        &.highlight {
+            background-color: #A88;
+        }
+    }
+
+    &-list {
+        background-color: #777;
+        min-height      : 100%;
+
+        p {
+            padding         : 1em;
+            width           : 100%;
+            word-break      : break-all;
+            background-color: #AAA;
+
+            &.highlight {
+                background-color: #A88;
+            }
+        }
+
+        &-box {
+            overflow-y: auto;
+            overflow-x: hidden;
+            flex      : 1;
+        }
     }
 }
-
-#bottom-box {
-    min-height: 6em;
-    flex: 4;
-}
-
