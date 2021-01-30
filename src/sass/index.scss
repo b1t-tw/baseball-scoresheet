@@ -14,7 +14,7 @@ body {
         position           : relative;
         background-image   : url("../img/baseball_field_1x1.svg");
         background-position: center;
-        background-size    : contain;
+        background-size    : 98%;
         background-repeat  : no-repeat;
     }
 
@@ -28,6 +28,10 @@ body {
         position: fixed;
         left    : 1em;
         bottom  : 1em;
+
+        button {
+            margin: 0 0.25em 0.25em 0;
+        }
     }
 
     .flex-column #footer {
@@ -49,8 +53,6 @@ body {
 .magnet {
     z-index         : 9999999999;
     position        : absolute;
-    left            : 5%;
-    bottom          : 5%;
     height          : 5%;
     width           : 5%;
     margin-left     : -2.5%;
@@ -68,7 +70,7 @@ body {
         border: 5px solid blue;
 
         &.highlight {
-            background-color: #AAF;
+            background-color: #66F;
         }
     }
 
@@ -76,7 +78,7 @@ body {
         border: 5px solid red;
 
         &.highlight {
-            background-color: #FAA;
+            background-color: #F66;
         }
     }
 
@@ -84,7 +86,7 @@ body {
         border: 5px solid yellow;
 
         &.highlight {
-            background-color: #FFA;
+            background-color: #FF6;
         }
     }
 
@@ -110,7 +112,7 @@ body {
     &-list-box {
         padding         : 0.5em;
         flex            : 1;
-        overflow-y      : auto;
+        overflow-y      : scroll;
         overflow-x      : hidden;
         background-color: #777;
     }
