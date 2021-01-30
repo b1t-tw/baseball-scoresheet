@@ -16,6 +16,7 @@ body {
         background-position: center;
         background-size    : 98%;
         background-repeat  : no-repeat;
+        overflow: hidden;
     }
 
     .flex-column .inner-board {
@@ -41,6 +42,27 @@ body {
         left            : 0;
         bottom          : 0;
         padding         : 0.5em;
+    }
+
+    #trash {
+        border-radius: 15% 0 0 0;
+        position: absolute;
+        height: 10%;
+        width: 10%;
+        bottom: 0;
+        right: 0;
+        padding: 5px;
+        text-align: center;
+        background-blend-mode: multiply;
+        background-color: rgb(255,0,0);
+        background-image: url("../img/trash-solid.svg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 60%;
+        opacity: 0.3;
+        &.highlight {
+            opacity: 0.6;
+        }
     }
 
     .board-option {

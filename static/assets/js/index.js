@@ -77,7 +77,7 @@ function addMagnetDefaut(e) {
 }
 
 function clearMagnet(e) {
-    $(".inner-board").html("");
+    $(".magnet").remove();
     $(".magnet-list").html("");
 }
 
@@ -143,6 +143,11 @@ function dragStart(e) {
 }
 
 function dragEnd(e) {
+    if($("#trash").hasClass("highlight")) {
+        let mid = dragItem.data("mid");
+        $(`[data-mid="${mid}"]`).remove();
+        $("#trash").removeClass("highlight");
+    }
     e.preventDefault();
     isDraging = false;
     dragItem = null;
@@ -167,6 +172,12 @@ function dragMove(e) {
     x /= $(".inner-board").width();
     y /= $(".inner-board").width();
     dragItem.css({ "left": x * 100 + "%", "top": y * 100 + "%" });
+    if(x > 0.9 && y > 0.9) {
+        $("#trash").addClass("highlight");
+    }
+    else {
+        $("#trash").removeClass("highlight");
+    }
 }
 
 function saveData(e) {
