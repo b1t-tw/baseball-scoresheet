@@ -20,13 +20,10 @@ $(".magnet-list").on("input", ".magnet-info input", function () {
 });
 
 $("button[name='button-add']").on("click", addMagnet);
-$("button[name='button-add']").on("touchstart", addMagnet);
-
 $("button[name='button-add-default']").on("click", addMagnetDefaut);
-$("button[name='button-add-default']").on("touchstart", addMagnetDefaut);
-
 $("button[name='button-clear']").on("click", clearMagnet);
-$("button[name='button-clear']").on("touchstart", clearMagnet);
+$("button[name='button-save']").on("click", saveData);
+$("button[name='button-load']").on("click", loadData);
 
 $(".inner-board").on("touchstart", ".magnet", magnetChoose);
 $(".inner-board").on("mousedown", ".magnet", magnetChoose);
@@ -46,14 +43,14 @@ whiteboard.on("mouseup", dragEnd);
 whiteboard.on("touchmove", dragMove);
 whiteboard.on("mousemove", dragMove);
 
-function appendMagnetDom(mid, color = "red") {
-    let magnet_dom = `<div class="magnet ${color}" draggable="false" data-mid="${mid}"><a></a></div>`;
+function appendMagnetDom(mid, color = "red", text = "") {
+    let magnet_dom = `<div class="magnet ${color}" draggable="false" data-mid="${mid}" style="left: 5%; top: 90%;"><a>${text}</a></div>`;
     let list_dom = `
     <p class="magnet-info ${color}" data-mid="${mid}">
     <button name="red" style="background-color: red;"></button>
     <button name="yellow" style="background-color: yellow;"></button>
     <button name="blue" style="background-color: blue;"></button>
-    <input type="text" name="name">
+    <input type="text" class="form-control mt-1" name="name" placeholder="name" value="${text}">
 
     </p>`;
     $(".inner-board").append(magnet_dom);
@@ -61,9 +58,6 @@ function appendMagnetDom(mid, color = "red") {
 }
 
 function addMagnet(e) {
-    if (e.type == "touchstart") {
-        e.preventDefault();
-    }
     let tstmp = new Date().getTime();
     let rn = Math.floor(Math.random() * Math.floor(10));
     let mid = `m${tstmp}n${rn}`;
@@ -72,10 +66,6 @@ function addMagnet(e) {
 
 function addMagnetDefaut(e) {
     let nine_pos = [[50, 65], [50, 87], [65, 58], [57, 51], [35, 58], [43, 51], [22, 38], [50, 28], [78, 38]];
-
-    if (e.type == "touchstart") {
-        e.preventDefault();
-    }
 
     for (let i = 0; i < 9; i++) {
         let tstmp = new Date().getTime();
@@ -87,9 +77,6 @@ function addMagnetDefaut(e) {
 }
 
 function clearMagnet(e) {
-    if (e.type == "touchstart") {
-        e.preventDefault();
-    }
     $(".inner-board").html("");
     $(".magnet-list").html("");
 }
@@ -182,4 +169,47 @@ function dragMove(e) {
     dragItem.css({ "left": x * 100 + "%", "top": y * 100 + "%" });
 }
 
+function saveData(e) {
+    let save_data = [];
+    $(".magnet").each(function () {
+        let data = {};
+        let mid = $(this).data("mid");
+        let name = $(`.magnet-info[data-mid="${mid}"] input`).val();
+        let x = $(this).position().left / $(".inner-board").width();
+        let y = $(this).position().top / $(".inner-board").width();
+
+        data["pos"] = [x, y];
+        if ($(this).hasClass("blue")) {
+            data["color"] = "blue";
+        }
+        else if ($(this).hasClass("yellow")) {
+            data["color"] = "yellow";
+        }
+        else {
+            data["color"] = "red";
+        }
+        data["name"] = name;
+        data["mid"] = mid;
+        save_data.push(data);
+    });
+    console.log(save_data);
+    localStorage.setItem("data", JSON.stringify(save_data));
+}
+
+function loadData(e) {
+    clearMagnet();
+    const load_data = JSON.parse(localStorage.getItem("data"));
+    if (load_data == undefined || load_data.length <= 0) {
+        addMagnetDefaut();
+    }
+    else {
+        for (id in load_data) {
+            let data = load_data[id];
+            appendMagnetDom(data["mid"], data["color"], data["name"]);
+            $(`.magnet[data-mid="${data["mid"]}"]`).css({ "left": data["pos"][0] * 100 + "%", "top": data["pos"][1] * 100 + "%" });
+        }
+    }
+}
+
 $(window).resize();
+loadData();
