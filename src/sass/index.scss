@@ -4,6 +4,7 @@ body {
     touch-action: none;
 }
 
+
 .outer-board {
     background-color: #DDD;
 
@@ -23,8 +24,24 @@ body {
         height     : 0;
     }
 
+    #footer {
+        position: fixed;
+        left    : 1em;
+        bottom  : 1em;
+    }
+
+    .flex-column #footer {
+        background-color: #666;
+        position        : relative;
+        text-align      : right;
+        left            : 0;
+        bottom          : 0;
+        padding         : 0.5em;
+    }
+
     .board-option {
-        flex            : 1 1;
+        display         : block;
+        flex            : 1;
         background-color: #666;
     }
 }
@@ -41,11 +58,12 @@ body {
     display         : block;
     border-radius   : 50%;
     background-color: #FFF;
-    color: white;
-    text-align: center;
-    padding-top: 1.25%;
+    color           : white;
+    text-align      : center;
+    padding-top     : 1.25%;
 
-    box-shadow: 0px 2px rgba(0,0,0,0.5);
+    box-shadow: 0px 2px rgba(0, 0, 0, 0.5);
+
     &.blue {
         border: 5px solid blue;
 
@@ -66,21 +84,39 @@ body {
         border: 5px solid yellow;
 
         &.highlight {
-            background-color:#FFA;
+            background-color: #FFA;
         }
     }
 
     a {
-        word-break: keep-all;
-        word-wrap: none;
-        background-color: rgba(0,0,0,0.5);
-        font-weight: bold;
+        word-break           : keep-all;
+        word-wrap            : none;
+        background-color     : rgba(0, 0, 0, 0.5);
+        font-weight          : bold;
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select  : none;
+        /* Safari */
+        -khtml-user-select   : none;
+        /* Konqueror HTML */
+        -moz-user-select     : none;
+        /* Firefox */
+        -ms-user-select      : none;
+        /* Internet Explorer/Edge */
+        user-select          : none;
+        /* Non-prefixed version, currently
+                                      supported by Chrome and Opera */
+    }
+    &-list-box {
+        padding         : 0.5em;
+        flex            : 1;
+        overflow-y      : auto;
+        overflow-x      : hidden;
+        background-color: #777;
     }
 
     &-list {
-        background-color: #777;
-        min-height      : 100%;
-
+        position: relative;
         p {
             padding         : 1em;
             width           : 100%;
@@ -88,21 +124,33 @@ body {
             background-color: #AAA;
 
             &.highlight {
-                background-color: #A88;
+                background-color: #CCC;
             }
-        }
 
-        &-box {
-            overflow-y: auto;
-            overflow-x: hidden;
-            flex      : 1;
+            &.blue {
+                button[name="blue"] {
+                    outline: 3px solid white;
+                }
+            }
+
+            &.red {
+                button[name="red"] {
+                    outline: 3px solid white;
+                }
+            }
+
+            &.yellow {
+                button[name="yellow"] {
+                    outline: 3px solid white;
+                }
+            }
         }
 
         .magnet-info {
             button {
                 height: 1em;
-                width: 1em;
-                margin-left: 0.5em;
+                width : 1em;
+                margin: 0 0.25em;
             }
         }
     }
