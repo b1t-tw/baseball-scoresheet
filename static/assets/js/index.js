@@ -1,3 +1,8 @@
+
+let dragItem = null;
+let whiteboard = $(".outer-board");
+let isDraging = false;
+
 $(window).resize(function () {
     let inner_w = $(this).width();
     let inner_h = $(this).height();
@@ -8,9 +13,11 @@ $(window).resize(function () {
         $(".outer-board > div").removeClass("flex-column");
     }
 });
-let dragItem = null;
-let whiteboard = $(".outer-board");
-let isDraging = false;
+
+$(".magnet-list").on("input", ".magnet-info input", function() {
+    let mid = $(this).parent(".magnet-info").data("mid");
+    $(`.magnet[data-mid="${mid}"] a`).text($(this).val());
+});
 
 $("button[name='button-add']").on("click", addMagnet);
 $("button[name='button-add']").on("touchstart", addMagnet);
@@ -27,6 +34,9 @@ $(".inner-board").on("mousedown", ".magnet", magnetChoose);
 $(".inner-board").on("mouseenter mouseleave", ".magnet", handlerInOut);
 $(".magnet-list").on("mouseenter mouseleave", "p", handlerInOut);
 
+$(".magnet-list").on("click", ".magnet-info button", changeMagnetColor);
+$(".magnet-list").on("touchstart", ".magnet-info button", changeMagnetColor);
+
 whiteboard.on("touchstart", dragStart);
 whiteboard.on("mousedown", dragStart);
 
@@ -36,15 +46,29 @@ whiteboard.on("mouseup", dragEnd);
 whiteboard.on("touchmove", dragMove);
 whiteboard.on("mousemove", dragMove);
 
+function appendMagnetDom(mid) {
+    let magnet_dom = `<div class="magnet red" draggable="false" data-mid="${mid}"><a></a></div>`;
+    let list_dom = `
+    <p class="magnet-info" data-mid="${mid}">${mid}
+
+    <button name="red" style="background-color: red;"></button>
+    <button name="yellow" style="background-color: yellow;"></button>
+    <button name="blue" style="background-color: blue;"></button>
+    <input type="text" name="name" class="ml-4">
+
+    </p>`;
+    $(".inner-board").append(magnet_dom);
+    $(".magnet-list").append(list_dom);
+}
+
 function addMagnet(e) {
     if (e.type == "touchstart") {
         e.preventDefault();
     }
     let tstmp = new Date().getTime();
     let rn = Math.floor(Math.random() * Math.floor(10));
-    let id = `m${tstmp}n${rn}`;
-    $(".inner-board").append(`<span class="magnet red" draggable="false" data-mid="${id}"></span>`);
-    $(".magnet-list").append(`<p class="magnet-info" data-mid="${id}">${id}</p>`)
+    let mid = `m${tstmp}n${rn}`;
+    appendMagnetDom(mid);
 }
 
 function addMagnetDefaut(e) {
@@ -57,10 +81,9 @@ function addMagnetDefaut(e) {
     for (let i = 0; i < 9; i++) {
         let tstmp = new Date().getTime();
         let rn = i + 1;
-        let id = `m${tstmp}n${rn}`;
-        $(".inner-board").append(`<span class="magnet red" draggable="false" data-mid="${id}"></span>`);
-        $(".magnet-list").append(`<p class="magnet-info" data-mid="${id}">${id}</p>`);
-        $(`.magnet[data-mid="${id}"]`).css({ "left": nine_pos[i][0] + "%", "top": nine_pos[i][1] + "%" });
+        let mid = `m${tstmp}n${rn}`;
+        appendMagnetDom(mid);
+        $(`.magnet[data-mid="${mid}"]`).css({ "left": nine_pos[i][0] + "%", "top": nine_pos[i][1] + "%" });
     }
 }
 
@@ -72,8 +95,34 @@ function clearMagnet(e) {
     $(".magnet-list").html("");
 }
 
+function changeMagnetColor(e) {
+    if (e.type == "touchstart") {
+        e.preventDefault();
+    }
+
+    let mid = $(this).parent(".magnet-info").data("mid");
+    $(`.magnet[data-mid="${mid}"]`).removeClass("red");
+    $(`.magnet[data-mid="${mid}"]`).removeClass("yellow");
+    $(`.magnet[data-mid="${mid}"]`).removeClass("blue");
+
+    switch ($(this).attr("name")) {
+        case "red":
+            $(`.magnet[data-mid="${mid}"]`).addClass("red");
+            break;
+        case "yellow":
+            $(`.magnet[data-mid="${mid}"]`).addClass("yellow");
+            break;
+        case "blue":
+            $(`.magnet[data-mid="${mid}"]`).addClass("blue");
+            break;
+    
+        default:
+            break;
+    }    
+}
+
 function handlerInOut(e) {
-    mid = $(this).attr("data-mid");
+    mid = $(this).data("mid");
     $(`.magnet[data-mid="${mid}"]`).toggleClass("highlight");
     $(`.magnet-list p[data-mid="${mid}"]`).toggleClass("highlight");
 }
@@ -88,7 +137,7 @@ function magnetChoose(e) {
     dragItem = $(this);
     $(".highlight").removeClass("highlight");
 
-    mid = $(this).attr("data-mid");
+    mid = $(this).data("mid");
     $(`.magnet[data-mid="${mid}"]`).toggleClass("highlight");
     $(`.magnet-list p[data-mid="${mid}"]`).toggleClass("highlight");
 }
@@ -117,12 +166,12 @@ function dragMove(e) {
         let touch = e.originalEvent.targetTouches[0];
         x = touch.pageX;
         y = touch.pageY;
-        console.log("touchMove!!" + x + ", " + y);
+        //console.log("touchMove!!" + x + ", " + y);
     }
     else {
         x = e.pageX;
         y = e.pageY;
-        console.log("mouseMove!!" + x + ", " + y);
+        //console.log("mouseMove!!" + x + ", " + y);
     }
     x /= $(".inner-board").width();
     y /= $(".inner-board").width();
