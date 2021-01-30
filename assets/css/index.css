@@ -12,7 +12,8 @@ body {
     background-image: url("../img/baseball_field_1x1.svg");
     background-position: center;
     background-size: 98%;
-    background-repeat: no-repeat; }
+    background-repeat: no-repeat;
+    overflow: hidden; }
   .outer-board .flex-column .inner-board {
     width: 100%;
     padding-top: 100%;
@@ -30,6 +31,24 @@ body {
     left: 0;
     bottom: 0;
     padding: 0.5em; }
+  .outer-board #trash {
+    border-radius: 15% 0 0 0;
+    position: absolute;
+    height: 10%;
+    width: 10%;
+    bottom: 0;
+    right: 0;
+    padding: 5px;
+    text-align: center;
+    background-blend-mode: multiply;
+    background-color: red;
+    background-image: url("../img/trash-solid.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60%;
+    opacity: 0.3; }
+    .outer-board #trash.highlight {
+      opacity: 0.6; }
   .outer-board .board-option {
     display: block;
     flex: 1;
