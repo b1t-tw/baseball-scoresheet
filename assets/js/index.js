@@ -1,6 +1,6 @@
 
 let dragItem = null;
-let whiteboard = $(".outer-board");
+let whiteboard = $(".inner-board");
 let isDraging = false;
 
 $(window).resize(function () {
