@@ -30,7 +30,7 @@ body {
         left    : 1em;
         bottom  : 1em;
 
-        button {
+        button, input {
             margin: 0 0.25em 0.25em 0;
         }
     }
@@ -167,6 +167,10 @@ body {
                 button[name="yellow"] {
                     outline: 3px solid white;
                 }
+            }
+
+            input[name="speed"] {
+                width: 100%;
             }
         }
 

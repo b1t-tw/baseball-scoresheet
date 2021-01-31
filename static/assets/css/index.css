@@ -22,7 +22,7 @@ body {
     position: fixed;
     left: 1em;
     bottom: 1em; }
-    .outer-board #footer button {
+    .outer-board #footer button, .outer-board #footer input {
       margin: 0 0.25em 0.25em 0; }
   .outer-board .flex-column #footer {
     background-color: #666;
@@ -119,6 +119,8 @@ body {
         outline: 3px solid white; }
       .magnet-list p.yellow button[name="yellow"] {
         outline: 3px solid white; }
+      .magnet-list p input[name="speed"] {
+        width: 100%; }
     .magnet-list .magnet-info button {
       height: 1em;
       width: 1em;

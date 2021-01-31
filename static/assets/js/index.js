@@ -2,10 +2,19 @@
 let dragItem = null;
 let whiteboard = $(".inner-board");
 let isDraging = false;
+let recorder = {};
+
 
 $(window).resize(function () {
+    $(".magnet").each(function () {
+        let x = $(this).position().left / $(".inner-board").width();
+        let y = $(this).position().top / $(".inner-board").width();
+        $(this).css({ "left": x * 100 + "%", "top": y * 100 + "%" });
+    });
+
     let inner_w = $(this).width();
     let inner_h = $(this).height();
+
     if (inner_w <= inner_h) {
         $(".outer-board > div").addClass("flex-column");
     }
@@ -14,7 +23,7 @@ $(window).resize(function () {
     }
 });
 
-$(".magnet-list").on("input", ".magnet-info input", function () {
+$(".magnet-list").on("input", ".magnet-info input[name='name']", function () {
     let mid = $(this).parent(".magnet-info").data("mid");
     $(`.magnet[data-mid="${mid}"] a`).text($(this).val());
 });
@@ -24,6 +33,8 @@ $("button[name='button-add-default']").on("click", addMagnetDefaut);
 $("button[name='button-clear']").on("click", clearMagnet);
 $("button[name='button-save']").on("click", saveData);
 $("button[name='button-load']").on("click", loadData);
+$("input[name='check-record']").on("change", recordEvent);
+$("button[name='button-play']").on("click", playRecord);
 
 $(".inner-board").on("touchstart", ".magnet", magnetChoose);
 $(".inner-board").on("mousedown", ".magnet", magnetChoose);
@@ -43,13 +54,14 @@ whiteboard.on("mouseup", dragEnd);
 whiteboard.on("touchmove", dragMove);
 whiteboard.on("mousemove", dragMove);
 
-function appendMagnetDom(mid, color = "red", text = "") {
+function appendMagnetDom(mid, color = "red", text = "", speed = 50) {
     let magnet_dom = `<div class="magnet ${color}" draggable="false" data-mid="${mid}" style="left: 5%; top: 90%;"><a>${text}</a></div>`;
     let list_dom = `
     <p class="magnet-info ${color}" data-mid="${mid}">
     <button name="red" style="background-color: red;"></button>
     <button name="yellow" style="background-color: yellow;"></button>
     <button name="blue" style="background-color: blue;"></button>
+    <input type="range" min="10" max="90" value="${speed}" name="speed">
     <input type="text" class="form-control mt-1" name="name" placeholder="name" value="${text}">
 
     </p>`;
@@ -66,7 +78,7 @@ function addMagnet(e) {
 
 function addMagnetDefaut(e) {
     let nine_pos = [[50, 65], [50, 87], [65, 58], [57, 51], [35, 58], [43, 51], [22, 38], [50, 28], [78, 38]];
-
+    clearMagnet();
     for (let i = 0; i < 9; i++) {
         let tstmp = new Date().getTime();
         let rn = i + 1;
@@ -74,14 +86,33 @@ function addMagnetDefaut(e) {
         appendMagnetDom(mid, "red", rn);
         $(`.magnet[data-mid="${mid}"]`).css({ "left": nine_pos[i][0] + "%", "top": nine_pos[i][1] + "%" });
     }
+    {
+        let tstmp = new Date().getTime() +1;
+        let rn = 0;
+        let mid = `m${tstmp}n${rn}`;
+        appendMagnetDom(mid, "blue", "打者", 25);
+        $(`.magnet[data-mid="${mid}"]`).css({ "left": 45 + "%", "top": 82 + "%" });
+    }
+    {
+        let tstmp = new Date().getTime() +1;
+        let rn = 1;
+        let mid = `m${tstmp}n${rn}`;
+        appendMagnetDom(mid, "yellow", "球", 75);
+        $(`.magnet[data-mid="${mid}"]`).css({ "left": 50 + "%", "top": 82 + "%" });
+    }
 
-    let tstmp = new Date().getTime() +1;
-    let rn = 0;
-    let mid = `m${tstmp}n${rn}`;
-    appendMagnetDom(mid, "blue", "打者");
-    $(`.magnet[data-mid="${mid}"]`).css({ "left": 45 + "%", "top": 82 + "%" });
 
+}
 
+function recordEvent(e) {
+    if($(this).prop("checked")) {
+        recorder = {};
+        recorder['orig'] = snapData();
+        recorder['plays'] = {};
+    }
+    else {
+        load(recorder['orig']);
+    }
 }
 
 function clearMagnet(e) {
@@ -132,13 +163,17 @@ function magnetChoose(e) {
 
     mid = $(this).data("mid");
     $(`[data-mid="${mid}"]`).toggleClass("highlight");
-    console.log($(`.magnet-info[data-mid="${mid}"]`).position().top);
+    
     $(".magnet-list-box").animate(
         {
             scrollTop: $(`.magnet-info[data-mid="${mid}"]`).position().top
         },
         500
     );
+    
+    if(!(mid in recorder['plays'])) {
+        recorder['plays'][mid] = [dragItem.position()];
+    }
 }
 
 function dragStart(e) {
@@ -151,12 +186,16 @@ function dragStart(e) {
 }
 
 function dragEnd(e) {
+    e.preventDefault();
+    if (!isDraging || dragItem == null) return;
+    let mid = dragItem.data("mid");
     if($("#trash").hasClass("highlight")) {
-        let mid = dragItem.data("mid");
         $(`[data-mid="${mid}"]`).remove();
         $("#trash").removeClass("highlight");
     }
-    e.preventDefault();
+    else {
+        recorder['plays'][mid].push(dragItem.position());
+    }
     isDraging = false;
     dragItem = null;
 }
@@ -188,15 +227,38 @@ function dragMove(e) {
     }
 }
 
-function saveData(e) {
+function playRecord() {
+    load(recorder['orig']);
+    for(mid in recorder['plays']) {
+        if(mid == undefined) continue;
+
+        let pos_array = recorder['plays'][mid];
+        for(let i = 0; i < pos_array.length-1; i++) {
+            addAnim(mid, pos_array[i], pos_array[i+1]);
+        }
+    }
+}
+
+function addAnim(mid, start_pos, end_pos, easing = "linear") {
+    let delta_x = (start_pos['left'] - end_pos['left']) / $(".inner-board").width();
+    let delta_y = (start_pos['top'] - end_pos['top']) / $(".inner-board").width();
+    let delta = Math.sqrt(delta_x*delta_x + delta_y*delta_y);
+    let speed = 100 - $(`.magnet-info[data-mid="${mid}"] input[name='speed']`).val();
+    $(`.magnet[data-mid="${mid}"]`).velocity({left: end_pos['left'], top: end_pos['top']},{ duration: delta*speed*100 , easing: easing});
+}
+
+function snapData() {
     let save_data = [];
     $(".magnet").each(function () {
         let data = {};
         let mid = $(this).data("mid");
-        let name = $(`.magnet-info[data-mid="${mid}"] input`).val();
+        data["mid"] = mid;
+        let name = $(`.magnet-info[data-mid="${mid}"] input[name='name']`).val();
+        data["name"] = name;
+        let speed = $(`.magnet-info[data-mid="${mid}"] input[name='speed']`).val();
+        data["speed"] = speed;
         let x = $(this).position().left / $(".inner-board").width();
         let y = $(this).position().top / $(".inner-board").width();
-
         data["pos"] = [x, y];
         if ($(this).hasClass("blue")) {
             data["color"] = "blue";
@@ -207,28 +269,38 @@ function saveData(e) {
         else {
             data["color"] = "red";
         }
-        data["name"] = name;
-        data["mid"] = mid;
+
         save_data.push(data);
     });
     console.log(save_data);
+    return save_data;
+}
+
+function saveData(e) {
+    let save_data = snapData();
     localStorage.setItem("data", JSON.stringify(save_data));
 }
 
-function loadData(e) {
+function load(load_data) {
     clearMagnet();
-    const load_data = JSON.parse(localStorage.getItem("data"));
     if (load_data == undefined || load_data.length <= 0) {
         addMagnetDefaut();
     }
     else {
         for (id in load_data) {
             let data = load_data[id];
-            appendMagnetDom(data["mid"], data["color"], data["name"]);
+            appendMagnetDom(data["mid"], data["color"], data["name"], data["speed"]);
             $(`.magnet[data-mid="${data["mid"]}"]`).css({ "left": data["pos"][0] * 100 + "%", "top": data["pos"][1] * 100 + "%" });
         }
     }
 }
 
+function loadData(e) {
+    const load_data = JSON.parse(localStorage.getItem("data"));
+    load(load_data);
+}
+
 $(window).resize();
 loadData();
+recorder['orig'] = snapData();
+recorder['plays'] = {};
