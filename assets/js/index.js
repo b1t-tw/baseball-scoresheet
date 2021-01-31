@@ -71,9 +71,17 @@ function addMagnetDefaut(e) {
         let tstmp = new Date().getTime();
         let rn = i + 1;
         let mid = `m${tstmp}n${rn}`;
-        appendMagnetDom(mid);
+        appendMagnetDom(mid, "red", rn);
         $(`.magnet[data-mid="${mid}"]`).css({ "left": nine_pos[i][0] + "%", "top": nine_pos[i][1] + "%" });
     }
+
+    let tstmp = new Date().getTime() +1;
+    let rn = 0;
+    let mid = `m${tstmp}n${rn}`;
+    appendMagnetDom(mid, "blue", "打者");
+    $(`.magnet[data-mid="${mid}"]`).css({ "left": 45 + "%", "top": 82 + "%" });
+
+
 }
 
 function clearMagnet(e) {
