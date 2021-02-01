@@ -58,7 +58,7 @@ function appendMagnetTemplate(mid, color = "red", text = "", speed = 50) {
         <button name="red" style="background-color: red;"></button>
         <button name="yellow" style="background-color: yellow;"></button>
         <button name="blue" style="background-color: blue;"></button>
-        <input type="range" min="10" max="90" value="${speed}" name="speed" id="speed">
+        <input type="range" min="10" max="90" step="5" value="${speed}" name="speed" id="speed">
     <input type="text" class="form-control mt-1" name="name" placeholder="name" value="${text}">
 
     </p>`;
@@ -71,6 +71,7 @@ function addMagnet(e) {
     let rn = Math.floor(Math.random() * Math.floor(10));
     let mid = `m${tstmp}n${rn}`;
     appendMagnetTemplate(mid);
+    setRecord();
 }
 
 function addMagnetDefaut(e) {
@@ -136,6 +137,8 @@ function changeMagnetColor(e) {
         default:
             break;
     }
+
+    recorder['orig'][mid]['color'] = $(this).attr("name");
 }
 
 function handlerInOut(e) {
@@ -147,14 +150,8 @@ function handlerInOut(e) {
 }
 
 function handlerSpeed(e) {
-    /*
-    if (e.type == "touchstart") {
-        console.log(e);
-        e.preventDefault();
-    }        
-    else {
-        console.log("slider move");
-    }*/
+    let mid = $(this).parent(".magnet-info").data("mid");
+    recorder['orig'][mid]['speed'] = $(this).val();
 }
 
 function magnetChoose(e) {
@@ -255,11 +252,10 @@ function addAnim(mid, start_pos, end_pos, easing = "linear") {
 }
 
 function snapData() {
-    let save_data = [];
+    let save_data = {};
     $(".magnet").each(function () {
         let data = {};
         let mid = $(this).data("mid");
-        data["mid"] = mid;
         let name = $(`.magnet-info[data-mid="${mid}"] input[name='name']`).val();
         data["name"] = name;
         let speed = $(`.magnet-info[data-mid="${mid}"] input[name='speed']`).val();
@@ -277,7 +273,7 @@ function snapData() {
             data["color"] = "red";
         }
 
-        save_data.push(data);
+        save_data[mid] = data;
     });
     console.log(save_data);
     return save_data;
@@ -295,10 +291,11 @@ function load(load_data) {
         addMagnetDefaut();
     }
     else {
-        for (id in load_data) {
-            let data = load_data[id];
-            appendMagnetTemplate(data["mid"], data["color"], data["name"], data["speed"]);
-            $(`.magnet[data-mid="${data["mid"]}"]`).css({ "left": data["pos"][0] * 100 + "%", "top": data["pos"][1] * 100 + "%" });
+        for (mid in load_data) {
+            if (mid == undefined) continue;
+            let data = load_data[mid];
+            appendMagnetTemplate(mid, data["color"], data["name"], data["speed"]);
+            $(`.magnet[data-mid="${mid}"]`).css({ "left": data["pos"][0] * 100 + "%", "top": data["pos"][1] * 100 + "%" });
         }
     }
 }
