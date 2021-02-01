@@ -39,7 +39,8 @@ $(".inner-board").on("mouseenter mouseleave", ".magnet", handlerInOut);
 $(".magnet-list").on("mouseenter mouseleave", "p", handlerInOut);
 
 $(".magnet-list").on("click", ".magnet-info button", changeMagnetColor);
-$(".magnet-list").on("touchstart", ".magnet-info button", changeMagnetColor);
+$(".magnet-list").on("touchstart", ".magnet-info input[name='speed']", handlerSpeed);
+$(".magnet-list").on("touchmove", ".magnet-info input[name='speed']", handlerSpeed);
 
 whiteboard.on("touchstart", dragStart);
 whiteboard.on("mousedown", dragStart);
@@ -96,6 +97,7 @@ function addMagnetDefaut(e) {
         appendMagnetTemplate(mid, "yellow", "球", 75);
         $(`.magnet[data-mid="${mid}"]`).css({ "left": 50 + "%", "top": 82 + "%" });
     }
+    setRecord();
 }
 
 function setRecord(e) {
@@ -115,10 +117,6 @@ function clearMagnet(e) {
 }
 
 function changeMagnetColor(e) {
-    if (e.type == "touchstart") {
-        e.preventDefault();
-    }
-
     let mid = $(this).parent(".magnet-info").data("mid");
     $(`[data-mid="${mid}"]`).removeClass("red");
     $(`[data-mid="${mid}"]`).removeClass("yellow");
@@ -142,7 +140,21 @@ function changeMagnetColor(e) {
 
 function handlerInOut(e) {
     mid = $(this).data("mid");
+    if(!$(this).hasClass("highlight")) {
+        $(".highlight").removeClass("highlight");
+    }
     $(`[data-mid="${mid}"]`).toggleClass("highlight");
+}
+
+function handlerSpeed(e) {
+    /*
+    if (e.type == "touchstart") {
+        console.log(e);
+        e.preventDefault();
+    }        
+    else {
+        console.log("slider move");
+    }*/
 }
 
 function magnetChoose(e) {
@@ -176,6 +188,7 @@ function dragStart(e) {
     }
     else {
     }
+    $("input").blur();
     isDraging = true;
 }
 
