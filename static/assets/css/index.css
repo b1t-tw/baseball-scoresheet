@@ -1,7 +1,9 @@
+@charset "UTF-8";
 body {
   height: 100%;
   width: 100%;
-  touch-action: none; }
+  touch-action: none;
+  font-family: 'Noto Sans TC', sans-serif; }
 
 .outer-board {
   background-color: #DDD; }
@@ -13,7 +15,18 @@ body {
     background-position: center;
     background-size: 98%;
     background-repeat: no-repeat;
-    overflow: hidden; }
+    overflow: hidden;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none; }
   .outer-board .flex-column .inner-board {
     width: 100%;
     padding-top: 100%;
@@ -22,8 +35,11 @@ body {
     position: fixed;
     left: 1em;
     bottom: 1em; }
-    .outer-board #footer button, .outer-board #footer input {
-      margin: 0 0.25em 0.25em 0; }
+    .outer-board #footer button,
+    .outer-board #footer input {
+      margin: 0 0.25em 0.25em 0;
+      font-family: 'Source Code Pro', monospace;
+      font-weight: bold; }
   .outer-board .flex-column #footer {
     background-color: #666;
     position: relative;
@@ -41,14 +57,14 @@ body {
     padding: 5px;
     text-align: center;
     background-blend-mode: multiply;
-    background-color: red;
+    color: white;
     background-image: url("../img/trash-solid.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;
     opacity: 0.3; }
     .outer-board #trash.highlight {
-      opacity: 0.6; }
+      opacity: 0.9; }
   .outer-board .board-option {
     display: block;
     flex: 1;
@@ -84,20 +100,7 @@ body {
     word-break: keep-all;
     word-wrap: none;
     background-color: rgba(0, 0, 0, 0.5);
-    font-weight: bold;
-    -webkit-touch-callout: none;
-    /* iOS Safari */
-    -webkit-user-select: none;
-    /* Safari */
-    -khtml-user-select: none;
-    /* Konqueror HTML */
-    -moz-user-select: none;
-    /* Firefox */
-    -ms-user-select: none;
-    /* Internet Explorer/Edge */
-    user-select: none;
-    /* Non-prefixed version, currently
-                                      supported by Chrome and Opera */ }
+    font-weight: bold; }
   .magnet-list-box {
     padding: 0.5em;
     flex: 1;
@@ -106,21 +109,42 @@ body {
     background-color: #777; }
   .magnet-list {
     position: relative; }
-    .magnet-list p {
+    .magnet-list > p {
       padding: 1em;
       width: 100%;
       word-break: break-all;
-      background-color: #AAA; }
-      .magnet-list p.highlight {
-        background-color: #CCC; }
-      .magnet-list p.blue button[name="blue"] {
+      background-color: rgba(150, 150, 150, 0.5);
+      text-align: center;
+      color: white; }
+      .magnet-list > p.highlight {
+        background-color: #969696;
+        outline: 0.25em solid white; }
+      .magnet-list > p.blue button[name="blue"] {
         outline: 3px solid white; }
-      .magnet-list p.red button[name="red"] {
+      .magnet-list > p.red button[name="red"] {
         outline: 3px solid white; }
-      .magnet-list p.yellow button[name="yellow"] {
+      .magnet-list > p.yellow button[name="yellow"] {
         outline: 3px solid white; }
-      .magnet-list p input[name="speed"] {
-        width: 100%; }
+      .magnet-list > p input[name="speed"] {
+        width: calc(100% - 6.5em);
+        height: 0.5em;
+        margin: 0.5em;
+        border-radius: 0.25em;
+        -webkit-appearance: none; }
+        .magnet-list > p input[name="speed"]:focus {
+          outline: 0; }
+        .magnet-list > p input[name="speed"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          position: relative;
+          /* 設為相對位置，為了前後區塊的絕對位置而設定 */
+          width: 1.5em;
+          height: 1.5em;
+          background-image: url(../img/running-solid.svg);
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contian;
+          border-radius: 50%;
+          /* 點選放大時候的漸變時間 */ }
     .magnet-list .magnet-info button {
       height: 1em;
       width: 1em;

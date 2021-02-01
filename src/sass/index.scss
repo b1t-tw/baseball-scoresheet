@@ -2,6 +2,7 @@ body {
     height      : 100%;
     width       : 100%;
     touch-action: none;
+    font-family: 'Noto Sans TC', sans-serif;
 }
 
 
@@ -16,7 +17,24 @@ body {
         background-position: center;
         background-size    : 98%;
         background-repeat  : no-repeat;
-        overflow: hidden;
+        overflow           : hidden;
+
+        -webkit-touch-callout: none;
+
+        /* iOS Safari */
+        -webkit-user-select: none;
+
+        /* Safari */
+        -khtml-user-select: none;
+
+        /* Konqueror HTML */
+        -moz-user-select: none;
+
+        /* Firefox */
+        -ms-user-select: none;
+
+        /* Internet Explorer/Edge */
+        user-select: none;
     }
 
     .flex-column .inner-board {
@@ -30,8 +48,11 @@ body {
         left    : 1em;
         bottom  : 1em;
 
-        button, input {
+        button,
+        input {
             margin: 0 0.25em 0.25em 0;
+            font-family: 'Source Code Pro', monospace;
+            font-weight: bold;
         }
     }
 
@@ -45,23 +66,24 @@ body {
     }
 
     #trash {
-        border-radius: 15% 0 0 0;
-        position: absolute;
-        height: 10%;
-        width: 10%;
-        bottom: 0;
-        right: 0;
-        padding: 5px;
-        text-align: center;
+        border-radius        : 15% 0 0 0;
+        position             : absolute;
+        height               : 10%;
+        width                : 10%;
+        bottom               : 0;
+        right                : 0;
+        padding              : 5px;
+        text-align           : center;
         background-blend-mode: multiply;
-        background-color: rgb(255,0,0);
-        background-image: url("../img/trash-solid.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 60%;
-        opacity: 0.3;
+        color                : white;
+        background-image     : url("../img/trash-solid.svg");
+        background-repeat    : no-repeat;
+        background-position  : center;
+        background-size      : 60%;
+        opacity              : 0.3;
+
         &.highlight {
-            opacity: 0.6;
+            opacity: 0.9;
         }
     }
 
@@ -113,24 +135,12 @@ body {
     }
 
     a {
-        word-break           : keep-all;
-        word-wrap            : none;
-        background-color     : rgba(0, 0, 0, 0.5);
-        font-weight          : bold;
-        -webkit-touch-callout: none;
-        /* iOS Safari */
-        -webkit-user-select  : none;
-        /* Safari */
-        -khtml-user-select   : none;
-        /* Konqueror HTML */
-        -moz-user-select     : none;
-        /* Firefox */
-        -ms-user-select      : none;
-        /* Internet Explorer/Edge */
-        user-select          : none;
-        /* Non-prefixed version, currently
-                                      supported by Chrome and Opera */
+        word-break      : keep-all;
+        word-wrap       : none;
+        background-color: rgba(0, 0, 0, 0.5);
+        font-weight     : bold;
     }
+
     &-list-box {
         padding         : 0.5em;
         flex            : 1;
@@ -141,14 +151,18 @@ body {
 
     &-list {
         position: relative;
-        p {
+
+        > p {
             padding         : 1em;
             width           : 100%;
             word-break      : break-all;
-            background-color: #AAA;
+            background-color: rgba(150,150,150,0.5);
+            text-align: center;
+            color: white;
 
             &.highlight {
-                background-color: #CCC;
+                background-color: rgba(150,150,150,1);
+                outline: 0.25em solid white;
             }
 
             &.blue {
@@ -170,7 +184,29 @@ body {
             }
 
             input[name="speed"] {
-                width: 100%;
+                width             : calc(100% - 6.5em);
+                height            : 0.5em;
+                margin            : 0.5em;
+                border-radius     : 0.25em;
+                -webkit-appearance: none;
+
+                &:focus {
+                    outline: 0;
+                }
+
+                &::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    position          : relative;
+                    /* 設為相對位置，為了前後區塊的絕對位置而設定 */
+                    width             : 1.5em;
+                    height            : 1.5em;
+                    background-image        : url(../img/running-solid.svg);
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contian;
+                    border-radius     : 50%;
+                    /* 點選放大時候的漸變時間 */
+                }
             }
         }
 
