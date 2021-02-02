@@ -1,0 +1,24 @@
+extends ../base.pug
+
+block heads
+    title 棒球戰術白板
+    link(rel="stylesheet" href='../assets/css/clipboard.css?v=1.2.1')
+block contents
+    .h-100.outer-board
+        .d-flex.h-100
+            .inner-board
+                #trash                
+            .magnet-list-box
+                .magnet-list
+            #footer
+                button.btn.btn-danger(type='button' name='button-add') +
+                button.btn.btn-warning(type='button' name='button-add-default') default
+                button.btn.btn-warning(type='button' name='button-clear') clear
+                br
+                button.btn.btn-primary(type='button' name='button-save') save
+                button.btn.btn-primary(type='button' name='button-load') load
+                button.btn.btn-info(type='button' name='button-set') set
+                button.btn.btn-info(type='button' name='button-play') play
+                button.btn.btn-info(type='button' name='button-reset') reset
+block scripts
+    script(src="../assets/js/clipboard.js?v=1.2.1")

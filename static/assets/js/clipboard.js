@@ -39,8 +39,7 @@ $(".inner-board").on("mouseenter mouseleave", ".magnet", handlerInOut);
 $(".magnet-list").on("mouseenter mouseleave", "p", handlerInOut);
 
 $(".magnet-list").on("click", ".magnet-info button", changeMagnetColor);
-$(".magnet-list").on("touchstart", ".magnet-info input[name='speed']", handlerSpeed);
-$(".magnet-list").on("touchmove", ".magnet-info input[name='speed']", handlerSpeed);
+$(".magnet-list").on("change", ".magnet-info input[name='speed']", handlerSpeed);
 
 whiteboard.on("touchstart", dragStart);
 whiteboard.on("mousedown", dragStart);
@@ -152,6 +151,7 @@ function handlerInOut(e) {
 function handlerSpeed(e) {
     let mid = $(this).parent(".magnet-info").data("mid");
     recorder['orig'][mid]['speed'] = $(this).val();
+    console.log(mid+" speed: "+$(this).val());
 }
 
 function magnetChoose(e) {
